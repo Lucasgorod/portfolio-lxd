@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucas Gorodneff — Diseño de experiencias de aprendizaje</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #faf9f6;
+            --bg-warm: #f4f1eb;
+            --surface: #ffffff;
+            --text: #1a1a1a;
+            --text-secondary: #5c5c5c;
+            --text-muted: #8a8a8a;
+            --accent: #2c2c2c;
+            --border: #e8e5df;
+            --border-hover: #ccc8c0;
+            --serif: 'Instrument Serif', Georgia, serif;
+            --sans: 'DM Sans', system-ui, sans-serif;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--sans);
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        ::selection {
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        /* ---- LAYOUT ---- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* ---- NAV ---- */
+        .nav {
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .nav__name {
+            font-family: var(--serif);
+            font-size: 1.15rem;
+            color: var(--text);
+            text-decoration: none;
+        }
+
+        .nav__links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav__links a {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            letter-spacing: 0.03em;
+            transition: color 0.3s ease;
+        }
+
+        .nav__links a:hover { color: var(--text); }
+
+        /* ---- HERO ---- */
+        .hero {
+            padding: 6rem 0 5rem;
+        }
+
+        .hero__layout {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 3.5rem;
+            align-items: start;
+        }
+
+        .hero__photo-wrap {
+            position: relative;
+            width: 200px;
+            height: 250px;
+        }
+
+        .hero__photo-wrap::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: -10px;
+            width: 100%;
+            height: 100%;
+            border: 1px solid var(--border-hover);
+            border-radius: 2px;
+            z-index: 0;
+            transition: all 0.5s var(--ease);
+        }
+
+        .hero__photo-wrap:hover::before {
+            top: 8px;
+            left: -8px;
+            border-color: var(--text-muted);
+        }
+
+        .hero__photo-wrap::after {
+            content: '';
+            position: absolute;
+            bottom: -14px;
+            right: -14px;
+            width: 40px;
+            height: 40px;
+            border-right: 1px solid var(--border-hover);
+            border-bottom: 1px solid var(--border-hover);
+            z-index: 2;
+        }
+
+        .hero__photo {
+            position: relative;
+            z-index: 1;
+            width: 200px;
+            height: 250px;
+            object-fit: cover;
+            filter: grayscale(15%);
+            border-radius: 2px;
+        }
+
+        .hero__content {}
+
+        .hero__title {
+            font-family: var(--serif);
+            font-size: clamp(2.2rem, 4vw, 3rem);
+            font-weight: 400;
+            line-height: 1.15;
+            margin-bottom: 1.5rem;
+            color: var(--text);
+        }
+
+        .hero__title em {
+            font-style: italic;
+        }
+
+        .hero__bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            max-width: 560px;
+            line-height: 1.75;
+            font-weight: 300;
+        }
+
+        .hero__meta {
+            margin-top: 1.8rem;
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .hero__meta-item {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero__meta-item svg {
+            width: 14px;
+            height: 14px;
+            stroke: var(--text-muted);
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .hero__meta-item a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .hero__meta-item a:hover { color: var(--text); }
+
+        /* ---- DIVIDER ---- */
+        .divider {
+            height: 1px;
+            background: var(--border);
+            margin: 0;
+        }
+
+        /* ---- SECTION ---- */
+        .section {
+            padding: 4.5rem 0;
+        }
+
+        .section__label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section__label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+            max-width: 80px;
+        }
+
+        /* ---- WHAT I DO ---- */
+        .process {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+        }
+
+        .process__text {
+            font-size: 0.92rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .process__steps {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .process__step {
+            display: flex;
+            gap: 1rem;
+            align-items: baseline;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .process__step-num {
+            font-family: var(--serif);
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            font-style: italic;
+            flex-shrink: 0;
+            width: 20px;
+        }
+
+        .process__step-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        /* ---- TOOLS ---- */
+        .tools {
+            margin-top: 3rem;
+        }
+
+        .tools__list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tools__tag {
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            padding: 0.4rem 0.9rem;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .tools__tag:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        /* ---- PROJECTS ---- */
+        .project {
+            margin-bottom: 4rem;
+        }
+
+        .project:last-child { margin-bottom: 0; }
+
+        .project__header {
+            margin-bottom: 1.5rem;
+        }
+
+        .project__number {
+            font-family: var(--serif);
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-style: italic;
+            margin-bottom: 0.3rem;
+        }
+
+        .project__title {
+            font-family: var(--serif);
+            font-size: 1.6rem;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 0.6rem;
+        }
+
+        .project__desc {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+            max-width: 650px;
+        }
+
+        .project__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-top: 1rem;
+        }
+
+        .project__tag {
+            font-size: 0.68rem;
+            padding: 0.3rem 0.7rem;
+            background: var(--bg-warm);
+            color: var(--text-muted);
+            border-radius: 2px;
+        }
+
+        .project__link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1.2rem;
+            padding: 0.7rem 1.4rem;
+            font-family: var(--sans);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text);
+            background: none;
+            border: 1px solid var(--border);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project__link:hover {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: var(--bg);
+        }
+
+        .project__link svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        /* ---- PROJECT VIEWER OVERLAY ---- */
+        .viewer {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .viewer.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .viewer__bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.8rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: var(--bg);
+            flex-shrink: 0;
+        }
+
+        .viewer__title {
+            font-family: var(--serif);
+            font-size: 0.95rem;
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .viewer__close {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0.5rem 1rem;
+            font-family: var(--sans);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-secondary);
+            background: none;
+            border: 1px solid var(--border);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .viewer__close:hover {
+            border-color: var(--accent);
+            color: var(--text);
+        }
+
+        .viewer__close svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 1.5;
+        }
+
+        .viewer__iframe {
+            flex: 1;
+            width: 100%;
+            border: none;
+        }
+
+        /* ---- OTHER WORK ---- */
+        .work-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .work-card {
+            padding: 1.6rem;
+            border: 1px solid var(--border);
+            border-radius: 2px;
+            transition: border-color 0.3s ease;
+        }
+
+        .work-card:hover {
+            border-color: var(--border-hover);
+        }
+
+        .work-card__type {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+
+        .work-card__title {
+            font-family: var(--serif);
+            font-size: 1.05rem;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            line-height: 1.35;
+        }
+
+        .work-card__desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        .work-card__media {
+            position: relative;
+            margin-bottom: 1rem;
+            border-radius: 2px;
+            overflow: hidden;
+            background: var(--bg-warm);
+            line-height: 0;
+        }
+
+        .work-card__media img {
+            width: 100%;
+            display: block;
+            border-radius: 2px;
+        }
+
+        .work-card__media video {
+            width: 100%;
+            display: block;
+            border-radius: 2px;
+            background: #000;
+        }
+
+        /* ---- VIDEO THUMBNAIL OVERLAY ---- */
+        .work-card__media--video {
+            cursor: pointer;
+            aspect-ratio: 16 / 9;
+            background: var(--accent);
+        }
+
+        .work-card__media--video video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .work-card__media--video.is-playing video {
+            opacity: 1;
+        }
+
+        .work-card__thumb {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 1.4rem;
+            background: linear-gradient(
+                160deg,
+                rgba(28, 28, 28, 0.75) 0%,
+                rgba(28, 28, 28, 0.92) 100%
+            );
+            z-index: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .work-card__media--video.is-playing .work-card__thumb {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .work-card__thumb-type {
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: auto;
+        }
+
+        .work-card__thumb-title {
+            font-family: var(--serif);
+            font-size: 1rem;
+            font-weight: 400;
+            color: #fff;
+            line-height: 1.35;
+            margin-bottom: 1rem;
+        }
+
+        .work-card__thumb-play {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--sans);
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: rgba(255, 255, 255, 0.7);
+            transition: color 0.2s ease;
+        }
+
+        .work-card__media--video:hover .work-card__thumb-play {
+            color: #fff;
+        }
+
+        .work-card__thumb-play-icon {
+            width: 32px;
+            height: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .work-card__media--video:hover .work-card__thumb-play-icon {
+            border-color: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .work-card__thumb-play-icon svg {
+            width: 12px;
+            height: 12px;
+            fill: #fff;
+            stroke: none;
+            margin-left: 2px;
+        }
+
+        /* ---- PHOTO CARD OVERLAY ---- */
+        .work-card__media--photo {
+            position: relative;
+        }
+
+        .work-card__media--photo::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.15) 0%, transparent 40%);
+            pointer-events: none;
+            border-radius: 2px;
+        }
+
+        .work-card__tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+            margin-top: 0.9rem;
+        }
+
+        .work-card__tag {
+            font-size: 0.62rem;
+            padding: 0.2rem 0.55rem;
+            background: var(--bg-warm);
+            color: var(--text-muted);
+            border-radius: 2px;
+        }
+
+        @media (max-width: 768px) {
+            .work-grid { grid-template-columns: 1fr; }
+        }
+
+        /* ---- BACKGROUND ---- */
+        .background__grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        .background__col-title {
+            font-family: var(--serif);
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text);
+            margin-bottom: 1.2rem;
+            font-style: italic;
+        }
+
+        .background__item {
+            margin-bottom: 1.2rem;
+        }
+
+        .background__item-title {
+            font-size: 0.85rem;
+            color: var(--text);
+            font-weight: 400;
+        }
+
+        .background__item-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 300;
+        }
+
+        /* ---- CONTACT ---- */
+        .contact__text {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-weight: 300;
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+
+        .contact__links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .contact__link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .contact__link:hover { color: var(--text); }
+
+        .contact__link svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--text-muted);
+            fill: none;
+            stroke-width: 1.5;
+            flex-shrink: 0;
+        }
+
+        /* ---- FOOTER ---- */
+        .footer {
+            padding: 2.5rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer__text {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: 300;
+        }
+
+        /* ---- REVEAL ---- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-d1 { transition-delay: 0.05s; }
+        .reveal-d2 { transition-delay: 0.1s; }
+        .reveal-d3 { transition-delay: 0.15s; }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 768px) {
+            .hero__layout {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero__photo {
+                width: 140px;
+                height: 175px;
+            }
+
+            .process { grid-template-columns: 1fr; }
+            .background__grid { grid-template-columns: 1fr; }
+            .nav__links { display: none; }
+
+            .section { padding: 3rem 0; }
+            .hero { padding: 4rem 0 3rem; }
+
+            .project__iframe { height: 450px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="nav">
+        <a href="#" class="nav__name">Lucas Gorodneff</a>
+        <ul class="nav__links">
+            <li><a href="#trabajo">Qué hago</a></li>
+            <li><a href="#proyectos">Proyectos</a></li>
+            <li><a href="#trayectoria">Trayectoria</a></li>
+            <li><a href="#contacto">Contacto</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <!-- HERO -->
+        <section class="hero" id="inicio">
+            <div class="hero__layout">
+                <div class="hero__photo-wrap reveal">
+                    <img src="./1761306024533.jpg" alt="Lucas Gorodneff" class="hero__photo">
+                </div>
+
+                <div class="hero__content">
+                    <h1 class="hero__title reveal reveal-d1">
+                        Diseño experiencias<br>de <em>aprendizaje</em>
+                    </h1>
+                    <p class="hero__bio reveal reveal-d2">
+                        Soy tecnólogo educativo y diseñador instruccional. Hace doce años que trabajo en distintos niveles del sistema educativo, y en los últimos cuatro me enfoqué en el diseño visual interactivo y la producción de experiencias e-learning. Recibo contenido, lo convierto en cursos interactivos y acompaño a mis clientes hasta el producto final.
+                    </p>
+                    <div class="hero__meta reveal reveal-d3">
+                        <div class="hero__meta-item">
+                            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            Sevilla, España
+                        </div>
+                        <div class="hero__meta-item">
+                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            <a href="mailto:lucasgorod@gmail.com">lucasgorod@gmail.com</a>
+                        </div>
+                        <div class="hero__meta-item">
+                            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                            <a href="https://www.linkedin.com/in/lucas-ivan-gorodneff-601125167" target="_blank">LinkedIn</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- QUÉ HAGO -->
+        <section class="section" id="trabajo">
+            <div class="section__label reveal">Qué hago</div>
+
+            <div class="process">
+                <div class="process__text reveal">
+                    Trabajo como diseñador instruccional freelance. Convierto objetivos de formación empresarial o materiales académicos en experiencias e-learning medibles. Desde el guionado hasta la implementación en LMS, paso por el prototipado, la iteración con el cliente, el desarrollo de recursos interactivos y el aseguramiento de calidad del producto final.
+                </div>
+
+                <div class="process__steps reveal reveal-d1">
+                    <div class="process__step">
+                        <span class="process__step-num">1</span>
+                        <span class="process__step-text">Recibo el contenido y los objetivos de aprendizaje del cliente</span>
+                    </div>
+                    <div class="process__step">
+                        <span class="process__step-num">2</span>
+                        <span class="process__step-text">Guionado, prototipado y diseño de la experiencia interactiva</span>
+                    </div>
+                    <div class="process__step">
+                        <span class="process__step-num">3</span>
+                        <span class="process__step-text">Desarrollo en Articulate Rise/Storyline con recursos embebidos, videos con IA y elementos multimedia</span>
+                    </div>
+                    <div class="process__step">
+                        <span class="process__step-num">4</span>
+                        <span class="process__step-text">QA, iteración con el cliente y entrega del paquete SCORM listo para LMS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tools reveal" style="margin-top: 2.5rem;">
+                <div class="section__label">Herramientas</div>
+                <div class="tools__list">
+                    <span class="tools__tag">Articulate 360</span>
+                    <span class="tools__tag">Rise</span>
+                    <span class="tools__tag">Storyline</span>
+                    <span class="tools__tag">Adobe Captivate</span>
+                    <span class="tools__tag">Genially</span>
+                    <span class="tools__tag">H5P</span>
+                    <span class="tools__tag">Canva</span>
+                    <span class="tools__tag">Camtasia</span>
+                    <span class="tools__tag">Moodle</span>
+                    <span class="tools__tag">BlackBoard</span>
+                    <span class="tools__tag">Canvas LMS</span>
+                    <span class="tools__tag">SCORM / xAPI</span>
+                    <span class="tools__tag">HTML / CSS / JS</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- PROYECTOS -->
+        <section class="section" id="proyectos">
+            <div class="section__label reveal">Proyectos recientes</div>
+
+            <div class="project reveal">
+                <div class="project__header">
+                    <div class="project__number">01</div>
+                    <h2 class="project__title">Concepto de empresa y tipos de organizaciones</h2>
+                    <p class="project__desc">
+                        Módulo interactivo desarrollado en Articulate Rise para una formación corporativa sobre gestión empresarial. A partir del contenido proporcionado por el cliente, diseñé la experiencia incorporando recursos embebidos, videos con voz generada por IA y elementos interactivos. El curso se iteró con el cliente hasta cumplir los estándares de calidad acordados.
+                    </p>
+                    <div class="project__tags">
+                        <span class="project__tag">Articulate Rise</span>
+                        <span class="project__tag">SCORM</span>
+                        <span class="project__tag">Video IA</span>
+                        <span class="project__tag">Formación corporativa</span>
+                    </div>
+                    <button class="project__link" data-src="./projects/ge-empresa/index.html" data-title="Concepto de empresa y tipos de organizaciones">
+                        Ver proyecto
+                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="project reveal">
+                <div class="project__header">
+                    <div class="project__number">02</div>
+                    <h2 class="project__title">Educación centrada en el estudiante</h2>
+                    <p class="project__desc">
+                        Unidad didáctica sobre educación centrada en el estudiante, construida en Rise a partir de material académico. Integré distintos tipos de interacciones, contenido multimedia embebido y videos con narración generada mediante IA para hacer la experiencia más dinámica y accesible. El producto pasó por rondas de revisión y QA con el cliente.
+                    </p>
+                    <div class="project__tags">
+                        <span class="project__tag">Articulate Rise</span>
+                        <span class="project__tag">SCORM</span>
+                        <span class="project__tag">Video IA</span>
+                        <span class="project__tag">Educación</span>
+                    </div>
+                    <button class="project__link" data-src="./projects/edu-estudiante/index.html" data-title="Educación centrada en el estudiante">
+                        Ver proyecto
+                        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- OTROS TRABAJOS -->
+        <section class="section">
+            <div class="section__label reveal">Otros trabajos</div>
+
+            <div class="work-grid">
+
+                <div class="work-card reveal">
+                    <div class="work-card__media work-card__media--photo">
+                        <img src="./media/expo-oil-gas.jpeg" alt="Stand interactivo ITBA en Expo Oil & Gas 2025" loading="lazy">
+                    </div>
+                    <div class="work-card__type">Experiencia interactiva en evento</div>
+                    <div class="work-card__title">Stand interactivo — Expo Argentina Oil & Gas 2025</div>
+                    <div class="work-card__desc">
+                        Diseño y desarrollo de una experiencia interactiva en pantalla LED de gran formato para el stand de ITBA en la Expo Argentina Oil & Gas. Los visitantes podían explorar contenido institucional de forma táctil e inmersiva.
+                    </div>
+                    <div class="work-card__tags">
+                        <span class="work-card__tag">Diseño interactivo</span>
+                        <span class="work-card__tag">Evento presencial</span>
+                        <span class="work-card__tag">ITBA</span>
+                    </div>
+                </div>
+
+                <div class="work-card reveal reveal-d1">
+                    <div class="work-card__media work-card__media--video" data-video>
+                        <video src="./media/conferencia-itba-iaef.mp4" muted playsinline preload="metadata" controls></video>
+                        <div class="work-card__thumb">
+                            <span class="work-card__thumb-type">Experiencia interactiva</span>
+                            <div class="work-card__thumb-title">Experiencia interactiva<br>Conferencia ITBA e IAEF</div>
+                            <div class="work-card__thumb-play">
+                                <span class="work-card__thumb-play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></span>
+                                Reproducir
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card__type">Experiencia interactiva en evento</div>
+                    <div class="work-card__title">Experiencia interactiva — Conferencia ITBA e IAEF</div>
+                    <div class="work-card__desc">
+                        Producción de una experiencia interactiva en pantalla para una conferencia conjunta de ITBA e IAEF. Integración de contenido dinámico con navegación táctil para acompañar las presentaciones del evento.
+                    </div>
+                    <div class="work-card__tags">
+                        <span class="work-card__tag">Diseño interactivo</span>
+                        <span class="work-card__tag">Conferencia</span>
+                        <span class="work-card__tag">ITBA</span>
+                        <span class="work-card__tag">IAEF</span>
+                    </div>
+                </div>
+
+                <div class="work-card reveal">
+                    <div class="work-card__media work-card__media--video" data-video>
+                        <video src="./media/blackboard-aulas.mp4" muted playsinline preload="metadata" controls></video>
+                        <div class="work-card__thumb">
+                            <span class="work-card__thumb-type">Diseño de campus virtual</span>
+                            <div class="work-card__thumb-title">Aulas virtuales con diseño<br>interactivo y custom HTML</div>
+                            <div class="work-card__thumb-play">
+                                <span class="work-card__thumb-play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></span>
+                                Reproducir
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card__type">Diseño de campus virtual</div>
+                    <div class="work-card__title">Aulas virtuales con diseño interactivo y custom HTML</div>
+                    <div class="work-card__desc">
+                        Diseño y maquetación de aulas virtuales en Blackboard con HTML/CSS personalizado. Transformé el entorno estándar del LMS en un espacio visualmente atractivo y fácil de navegar para los estudiantes.
+                    </div>
+                    <div class="work-card__tags">
+                        <span class="work-card__tag">Blackboard</span>
+                        <span class="work-card__tag">Custom HTML/CSS</span>
+                        <span class="work-card__tag">LMS</span>
+                    </div>
+                </div>
+
+                <div class="work-card reveal reveal-d1">
+                    <div class="work-card__media work-card__media--video" data-video>
+                        <video src="./media/tutorial-class.mp4" muted playsinline preload="metadata" controls></video>
+                        <div class="work-card__thumb">
+                            <span class="work-card__thumb-type">Video tutorial</span>
+                            <div class="work-card__thumb-title">Tutorial de acceso a plataforma<br>Universidad de Innovación 2024</div>
+                            <div class="work-card__thumb-play">
+                                <span class="work-card__thumb-play-icon"><svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg></span>
+                                Reproducir
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card__type">Video tutorial</div>
+                    <div class="work-card__title">Tutorial de acceso a plataforma — Universidad de Innovación 2024</div>
+                    <div class="work-card__desc">
+                        Producción de un video tutorial de acceso a la plataforma Class para participantes de la Universidad de Innovación 2024 en ITBA. Guionado, grabación de pantalla y edición orientada a facilitar el onboarding.
+                    </div>
+                    <div class="work-card__tags">
+                        <span class="work-card__tag">Video tutorial</span>
+                        <span class="work-card__tag">Class</span>
+                        <span class="work-card__tag">Onboarding</span>
+                        <span class="work-card__tag">ITBA</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- TRAYECTORIA -->
+        <section class="section" id="trayectoria">
+            <div class="section__label reveal">Trayectoria</div>
+
+            <div class="background__grid">
+                <div class="reveal">
+                    <div class="background__col-title">Experiencia</div>
+
+                    <div class="background__item">
+                        <div class="background__item-title">LxD Freelance</div>
+                        <div class="background__item-sub">Autónomo &middot; 2025 – presente</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Profesor adjunto — TIC I</div>
+                        <div class="background__item-sub">UCES Virtual &middot; 2025 – presente</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Tecnólogo educativo</div>
+                        <div class="background__item-sub">ITBA Escuela de Innovación &middot; 2023 – 2025</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Contenidista y formador EdTech</div>
+                        <div class="background__item-sub">Ministerio de Educación GCBA &middot; 2023 – 2024</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Tallerista de Pensamiento Computacional</div>
+                        <div class="background__item-sub">Chicos.net / Telecom &middot; 2022 – 2024</div>
+                    </div>
+                </div>
+
+                <div class="reveal reveal-d1">
+                    <div class="background__col-title">Formación</div>
+
+                    <div class="background__item">
+                        <div class="background__item-title">Máster en Comunicación Organizacional</div>
+                        <div class="background__item-sub">Universidad de Sevilla &middot; 2025 – 2026</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Certificación en Diseño UX</div>
+                        <div class="background__item-sub">ITBA &middot; 2024</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Diplomatura en Educación en Línea</div>
+                        <div class="background__item-sub">FLACSO Argentina &middot; 2023 – 2024</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Lic. en Ciencias de la Comunicación</div>
+                        <div class="background__item-sub">Universidad de Buenos Aires &middot; 2018 – 2023</div>
+                    </div>
+                    <div class="background__item">
+                        <div class="background__item-title">Frontend Developer Bootcamp</div>
+                        <div class="background__item-sub">Scrimba &middot; 2021</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- CONTACTO -->
+        <section class="section" id="contacto">
+            <div class="section__label reveal">Contacto</div>
+
+            <div class="reveal">
+                <p class="contact__text">
+                    Si tenés un proyecto de formación o necesitás convertir contenido en una experiencia e-learning, escribime y lo conversamos.
+                </p>
+
+                <div class="contact__links">
+                    <a href="mailto:lucasgorod@gmail.com" class="contact__link">
+                        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        lucasgorod@gmail.com
+                    </a>
+                    <a href="https://www.linkedin.com/in/lucas-ivan-gorodneff-601125167" target="_blank" class="contact__link">
+                        <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+                        LinkedIn
+                    </a>
+                    <a href="tel:+34605072414" class="contact__link">
+                        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+                        +34 605 072 414
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p class="footer__text">Lucas Gorodneff &middot; 2025</p>
+        </footer>
+
+    </div>
+
+    <!-- PROJECT VIEWER OVERLAY -->
+    <div class="viewer" id="viewer">
+        <div class="viewer__bar">
+            <span class="viewer__title" id="viewerTitle"></span>
+            <button class="viewer__close" id="viewerClose">
+                <svg viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                Volver al portfolio
+            </button>
+        </div>
+        <iframe class="viewer__iframe" id="viewerFrame" src="about:blank"></iframe>
+    </div>
+
+    <script>
+        // Reveal on scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        reveals.forEach(el => observer.observe(el));
+
+        // Project viewer
+        const viewer = document.getElementById('viewer');
+        const viewerFrame = document.getElementById('viewerFrame');
+        const viewerTitle = document.getElementById('viewerTitle');
+        const viewerClose = document.getElementById('viewerClose');
+
+        document.querySelectorAll('.project__link[data-src]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                viewerFrame.src = btn.dataset.src;
+                viewerTitle.textContent = btn.dataset.title;
+                viewer.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        viewerClose.addEventListener('click', () => {
+            viewer.classList.remove('active');
+            document.body.style.overflow = '';
+            viewerFrame.src = 'about:blank';
+        });
+
+        // Video thumbnails
+        document.querySelectorAll('[data-video]').forEach(wrap => {
+            const thumb = wrap.querySelector('.work-card__thumb');
+            const video = wrap.querySelector('video');
+            thumb.addEventListener('click', () => {
+                wrap.classList.add('is-playing');
+                video.muted = false;
+                video.play();
+            });
+            video.addEventListener('ended', () => {
+                wrap.classList.remove('is-playing');
+                video.currentTime = 0;
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const t = document.querySelector(a.getAttribute('href'));
+                if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+</html>
