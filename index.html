@@ -297,6 +297,68 @@
             font-weight: 400;
         }
 
+        .hero__actions {
+            margin-top: 1.8rem;
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+
+        .hero__cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.9rem 1.6rem;
+            font-family: var(--sans);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+            color: var(--ink);
+            background: var(--accent);
+            border: 2px solid var(--ink);
+            text-decoration: none;
+            border-radius: 100px;
+            box-shadow: 3px 3px 0 var(--ink);
+            transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
+        }
+
+        .hero__cta:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0 var(--ink);
+        }
+
+        .hero__cta:active {
+            transform: translate(1px, 1px);
+            box-shadow: 1px 1px 0 var(--ink);
+        }
+
+        .hero__cta svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .hero__cta--ghost {
+            background: var(--paper);
+        }
+
+        .hero__cta--ghost:hover {
+            background: var(--accent);
+        }
+
+        .hero__cta-meta {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            padding-left: 4px;
+        }
+
         .hero__meta {
             margin-top: 2rem;
             display: flex;
@@ -1252,6 +1314,17 @@
                     <p class="hero__bio reveal reveal-d2">
                         Diseñador de experiencias de aprendizaje y especialista en Learning &amp; Development con más de 12 años creando soluciones formativas para empresas e instituciones. Trabajo en gestión de LMS (Moodle, Blackboard), desarrollo e-learning con estándares SCORM/xAPI y diseño instruccional con Articulate 360, Rise y Genially. Comunicador social por la UBA, especializado en Educación en Línea por FLACSO, con investigación aplicada en tecnología educativa e IA.
                     </p>
+                    <div class="hero__actions reveal reveal-d2">
+                        <a href="./CV-Lucas-Gorodneff.pdf" class="hero__cta" download>
+                            <svg viewBox="0 0 24 24"><path d="M12 3v13m0 0l-5-5m5 5l5-5M4 21h16"/></svg>
+                            Descargar CV
+                            <span class="hero__cta-meta">PDF · 49 KB</span>
+                        </a>
+                        <a href="#contacto" class="hero__cta hero__cta--ghost">
+                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                            Escribime
+                        </a>
+                    </div>
                     <div class="hero__meta reveal reveal-d3">
                         <div class="hero__meta-item">
                             <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
